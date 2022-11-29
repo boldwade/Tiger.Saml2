@@ -88,16 +88,13 @@ public class Authenticator : IDisposable
                 // TODO: Get azureLoginUrl from metadata somehow? Or should we issue a challenge? test
                 await httpContext.ChallengeAsync(
                     Saml2Defaults.Scheme,
-                    new AuthenticationProperties { RedirectUri = "https://localhost:44301" }
+                    new AuthenticationProperties { RedirectUri = "https://localhost:44405" }
                 ).ConfigureAwait(false);
 
-                //var location = httpContext.Response.Headers.Location;
-                //httpContext.Response.Headers.Remove("location");
+                var location = httpContext.Response.Headers.Location;
+                httpContext.Response.Headers.Remove("location");
                 //httpContext.Response.Headers.Add("Access-Control-Allow-Origin", "*");
-
-                // var location = httpContext.Response.Headers.Location;
-                // httpContext.Response.Headers.Remove("location");
-                // return new AuthenticationResult(new Uri(location));
+                return new AuthenticationResult(new Uri(location));
             }
 
             // var authUrl = await _accessTokenClient.GetAuthorizationUriAsync(

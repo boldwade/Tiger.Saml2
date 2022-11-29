@@ -21,7 +21,7 @@ public static class IServiceCollectionExtensions
     {
         _ = options ?? throw new ArgumentNullException(nameof(options));
 
-        // var optionsConfig = CreateConfigurationForOptions(options);
+        var optionsConfig = CreateConfigurationForOptions(options);
 
         // services.AddCors(x =>
         // {
@@ -82,7 +82,8 @@ public static class IServiceCollectionExtensions
                 o =>
                 {
                     o.SPOptions.EntityId = new EntityId("https://localhost:44330");
-                    // o.SPOptions.PublicOrigin = new Uri("https://localhost:44301");
+                    o.SPOptions.PublicOrigin = new Uri("https://localhost:44362");
+
                     // o.SPOptions.ReturnUrl = new Uri("https://localhost:44301");
                     o.IdentityProviders.Add(
                         new IdentityProvider(
@@ -104,50 +105,50 @@ public static class IServiceCollectionExtensions
 
         services.AddHttpContextAccessor().TryAddSingleton(options);
 
-        // services
-        //     // .AddSingleton<IAccessTokenClient, AccessTokenClient>()
-        //     // .AddTransient<ITicketStore, DistributedCacheTicketStore>()
-        //     // .AddSingleton<AuthenticationFilter>()
-        //     // .AddSingleton<AuthenticationMiddleware>()
-        //     .AddSingleton<Authenticator>();
-        //     // .AddTransient<IAuthenticationStore, AuthenticationStore>();
+         services
+             // .AddSingleton<IAccessTokenClient, AccessTokenClient>()
+             // .AddTransient<ITicketStore, DistributedCacheTicketStore>()
+             // .AddSingleton<AuthenticationFilter>()
+             // .AddSingleton<AuthenticationMiddleware>()
+             .AddSingleton<Authenticator>();
+        // .AddTransient<IAuthenticationStore, AuthenticationStore>();
 
         // services.TryAddSingleton<IMemoryCache, MemoryCache>();
         //
-        // services
-        //     .Configure<AuthenticationOptions>(optionsConfig.GetSection(nameof(AuthenticationOptions)));
+        services
+            .Configure<AuthenticationOptions>(optionsConfig.GetSection(nameof(AuthenticationOptions)));
         // .Configure<AccessTokenClientOptions>(optionsConfig.GetSection(nameof(AccessTokenClientOptions)));
 
         return services;
     }
 
-    //     /// <summary>
-    //     /// Return an IConfiguration object when calling AddTigerAuthentication(AuthenticationOptions)
-    //     /// Since IOptions object have been implemented, they wont be injected into controllers unless added through configuration
-    //     /// This method will be obsolete until all apps that need AddTigerAuthentication(AuthenticationOptions) are using AddTigerAuthentication()
-    //     /// </summary>
-    //     /// <returns></returns>
-    //     private static IConfiguration CreateConfigurationForOptions(AuthenticationOptions options)
-    //     {
-    //         var optionsConfig = new Dictionary<string, string?>
-    //         {
-    //             {"AuthenticationOptions:AuthorizationServiceUrl", options.AuthorizationServiceUrl},
-    //             {"AuthenticationOptions:IsLiveData", options.IsLiveData.ToString().ToLower()},
-    //             {"AuthenticationOptions:ApplicationName", options.ApplicationName},
-    //             {"AuthenticationOptions:ApplicationSecret", options.ApplicationSecret},
-    //             {"AuthenticationOptions:Scope", options.Scope},
-    //             {"AuthenticationOptions:ClientId", options.ClientId},
-    //             {"AuthenticationOptions:ClientSecret", options.ClientSecret},
-    //             {"AuthenticationOptions:ResourceOwnerType", options.ResourceOwnerType?.ToString() ?? null},
-    //             {"AccessTokenClientOptions:AuthorizationServiceUrl", options.AuthorizationServiceUrl},
-    //             {"AccessTokenClientOptions:IsLiveData", options.IsLiveData.ToString().ToLower()},
-    //             {"AccessTokenClientOptions:ClientId", options.ClientId},
-    //             {"AccessTokenClientOptions:ClientSecret", options.ClientSecret},
-    //             {"AccessTokenClientOptions:ApiVersion", options.ApiVersion?.ToString().ToLower() ?? null},
-    //         };
-    //
-    //         var builder = new ConfigurationBuilder();
-    //         builder.AddInMemoryCollection(optionsConfig);
-    //         return builder.Build();
-    //     }
+    /// <summary>
+    /// Return an IConfiguration object when calling AddTigerAuthentication(AuthenticationOptions)
+    /// Since IOptions object have been implemented, they wont be injected into controllers unless added through configuration
+    /// This method will be obsolete until all apps that need AddTigerAuthentication(AuthenticationOptions) are using AddTigerAuthentication()
+    /// </summary>
+    /// <returns></returns>
+    private static IConfiguration CreateConfigurationForOptions(AuthenticationOptions options)
+    {
+        var optionsConfig = new Dictionary<string, string?>
+             {
+                 {"AuthenticationOptions:AuthorizationServiceUrl", options.AuthorizationServiceUrl},
+                 {"AuthenticationOptions:IsLiveData", options.IsLiveData.ToString().ToLower()},
+                 {"AuthenticationOptions:ApplicationName", options.ApplicationName},
+                 {"AuthenticationOptions:ApplicationSecret", options.ApplicationSecret},
+                 {"AuthenticationOptions:Scope", options.Scope},
+                 {"AuthenticationOptions:ClientId", options.ClientId},
+                 {"AuthenticationOptions:ClientSecret", options.ClientSecret},
+                 {"AuthenticationOptions:ResourceOwnerType", options.ResourceOwnerType?.ToString() ?? null},
+                 {"AccessTokenClientOptions:AuthorizationServiceUrl", options.AuthorizationServiceUrl},
+                 {"AccessTokenClientOptions:IsLiveData", options.IsLiveData.ToString().ToLower()},
+                 {"AccessTokenClientOptions:ClientId", options.ClientId},
+                 {"AccessTokenClientOptions:ClientSecret", options.ClientSecret},
+                 {"AccessTokenClientOptions:ApiVersion", options.ApiVersion?.ToString().ToLower() ?? null},
+             };
+
+        var builder = new ConfigurationBuilder();
+        builder.AddInMemoryCollection(optionsConfig);
+        return builder.Build();
+    }
 }
